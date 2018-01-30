@@ -13,11 +13,13 @@ class ViewController: UIViewController {
     var timer = Timer()
     var isTimerRunning = false
     var time = 120
-    var currentCount = 0
+    var currentSeconds = 0
+    var currentMinutes = 0
 
     @IBOutlet weak var label: UILabel!
     
     @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var pauseButton: UIButton!
     
     @IBAction func start(_ sender: UIButton) {
         run()
@@ -25,15 +27,30 @@ class ViewController: UIViewController {
         sender.isEnabled = false
     }
     
+    // Trigger timer to start/resume
     func run(){
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateView), userInfo: nil, repeats: true)
     }
     
+    // This function updates the label showing the time. It shows minutes and seconds
+    // as per the time.
     func updateView(){
-        currentCount += 1
-        label.text = String(currentCount)
+        currentSeconds += 1
+        
+        label.text = String(currentSeconds)
+        
+        // Seconds are converted to minutes once they are multiple of 60
+        while(currentSeconds >= 60 && currentSeconds % 60 == 0){
+            currentMinutes += 1
+            currentSeconds = 0
+        }
+        
+        if currentMinutes > 0 {
+            label.text = String(currentMinutes) + ":" + String(currentSeconds)
+        }
     }
     
+    // Stop and resume the timer and change button title accordingly.
     @IBAction func pause(_ sender: UIButton) {
         if(isTimerRunning) {
             timer.invalidate()
@@ -46,12 +63,16 @@ class ViewController: UIViewController {
         }
     }
     
+    // On reset, stop the timer and reset the current time values. Also enable the
+    // "Start" button.
     @IBAction func reset(_ sender: UIButton) {
-        isTimerRunning = false
-        currentCount = 0
-        label.text = String(currentCount)
         timer.invalidate()
+        isTimerRunning = false
+        currentSeconds = 0
+        currentMinutes = 0
+        label.text = String(currentSeconds)
         startButton.isEnabled = true
+        pauseButton.setTitle("Pause", for: .normal)
     }
     
     override func viewDidLoad() {
