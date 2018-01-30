@@ -10,6 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var label: UILabel!
+    
+    @IBAction func start(_ sender: UIButton) {
+    }
+    
+    @IBAction func pause(_ sender: UIButton) {
+    }
+    
+    @IBAction func reset(_ sender: UIButton) {
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
